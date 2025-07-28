@@ -32,25 +32,23 @@ class CoreDataTherapyRepository: ObservableObject, TherapyRepository {
         let request: NSFetchRequest<ClientEntity> = ClientEntity.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(keyPath: \ClientEntity.name, ascending: true)]
         
-        return try await context.perform {
-            let entities = try context.fetch(request)
-            return entities.compactMap { entity in
-                guard let id = entity.id,
-                      let name = entity.name,
-                      let createdDate = entity.createdDate,
-                      let lastModified = entity.lastModified else {
-                    return nil
-                }
-                
-                return Client(
-                    id: id,
-                    name: name,
-                    dateOfBirth: entity.dateOfBirth,
-                    notes: entity.notes,
-                    createdDate: createdDate,
-                    lastModified: lastModified
-                )
+        let entities = try context.fetch(request)
+        return entities.compactMap { entity in
+            guard let id = entity.id,
+                  let name = entity.name,
+                  let createdDate = entity.createdDate,
+                  let lastModified = entity.lastModified else {
+                return nil
             }
+            
+            return Client(
+                id: id,
+                name: name,
+                dateOfBirth: entity.dateOfBirth,
+                notes: entity.notes,
+                createdDate: createdDate,
+                lastModified: lastModified
+            )
         }
     }
     

@@ -4,7 +4,7 @@ import CoreData
 
 final class FoundationTests: XCTestCase {
     
-    var repository: CoreDataTherapyRepository!
+    var repository: SimpleCoreDataRepository!
     var testContainer: NSPersistentContainer!
     
     override func setUp() async throws {
@@ -24,7 +24,7 @@ final class FoundationTests: XCTestCase {
         let testStack = CoreDataStack.shared
         testStack.persistentContainer = testContainer
         
-        repository = CoreDataTherapyRepository(coreDataStack: testStack)
+        repository = SimpleCoreDataRepository(coreDataStack: testStack)
     }
     
     override func tearDown() async throws {
