@@ -6,7 +6,7 @@ Build a native Apple Watch + iPhone app system for speech and ABA therapists to 
 
 ## Core Value Proposition
 
-**Problem**: Therapists currently use paper forms or tablets that disrupt natural therapy flow, leading to incomplete data collection and reduced session effectiveness.
+**Problem**: Therapists currently use paper forms that disrupt natural therapy flow, leading to incomplete data collection and reduced session effectiveness.
 
 **Solution**: Discreet Apple Watch interface enabling rapid trial logging with intuitive swipe gestures, synchronized with comprehensive iPhone companion app for session management and analysis.
 
