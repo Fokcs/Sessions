@@ -1,0 +1,238 @@
+ <svg width="375" height="812" viewBox="0 0 375 812" xmlns="http://www.w3.org/2000/svg">
+  <!-- Definitions -->
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="newClientGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#32D74B"/>
+      <stop offset="100%" style="stop-color:#30DB5B"/>
+    </linearGradient>
+    
+    <linearGradient id="viewClientsGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#007AFF"/>
+      <stop offset="100%" style="stop-color:#5AC8FA"/>
+    </linearGradient>
+    
+    <linearGradient id="watchSessionGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF6B6B"/>
+      <stop offset="100%" style="stop-color:#FF8E8E"/>
+    </linearGradient>
+    
+    <!-- Filters -->
+    <filter id="cardShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="2" stdDeviation="8" flood-color="#000000" flood-opacity="0.1"/>
+    </filter>
+    
+    <filter id="primaryShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="4" stdDeviation="12" flood-color="#000000" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="375" height="812" fill="#000000"/>
+  
+  <!-- Status Bar -->
+  <g id="status-bar" transform="translate(0, 0)">
+    <rect width="375" height="44" fill="#000000"/>
+    <!-- Time -->
+    <text x="24" y="30" font-family="-apple-system, sans-serif" font-size="17" font-weight="600" fill="#FFFFFF">9:41</text>
+    
+    <!-- Status Icons -->
+    <g transform="translate(320, 15)">
+      <!-- Signal -->
+      <g>
+        <rect x="0" y="8" width="2" height="4" rx="1" fill="#FFFFFF"/>
+        <rect x="4" y="6" width="2" height="6" rx="1" fill="#FFFFFF"/>
+        <rect x="8" y="4" width="2" height="8" rx="1" fill="#FFFFFF"/>
+      </g>
+      
+      <!-- WiFi -->
+      <g transform="translate(15, 0)">
+        <path d="M7.5 2C10.5 2 13 3.5 14.5 6" stroke="#FFFFFF" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <path d="M7.5 5C9 5 10.5 6 11.5 7.5" stroke="#FFFFFF" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <circle cx="7.5" cy="10" r="1" fill="#FFFFFF"/>
+      </g>
+      
+      <!-- Battery -->
+      <g transform="translate(30, 3)">
+        <rect x="0" y="3" width="22" height="10" rx="2" stroke="#FFFFFF" stroke-width="1" fill="none"/>
+        <rect x="1" y="4" width="20" height="8" rx="1" fill="#FFFFFF"/>
+        <rect x="22" y="6" width="2" height="4" rx="1" fill="#FFFFFF"/>
+      </g>
+    </g>
+  </g>
+  
+  <!-- Header -->
+  <g id="header" transform="translate(0, 44)">
+    <rect width="375" height="100" fill="#000000"/>
+    
+    <!-- Large Title -->
+    <text x="20" y="50" font-family="-apple-system, sans-serif" font-size="34" font-weight="700" fill="#FFFFFF">AppName</text>
+    
+    <!-- Profile Icon -->
+    <g transform="translate(315, 20)">
+      <circle cx="20" cy="20" r="20" fill="#1C1C1E"/>
+      <circle cx="20" cy="15" r="8" fill="#8E8E93"/>
+      <path d="M8 32 C8 25 13 20 20 20 C27 20 32 25 32 32" fill="#8E8E93"/>
+    </g>
+  </g>
+  
+  <!-- Main Content -->
+  <g id="main-content" transform="translate(0, 144)">
+    
+    <!-- Primary Cards Grid -->
+    <g id="primary-cards" transform="translate(20, 20)">
+      
+      <!-- New Client Card -->
+      <g id="new-client-card">
+        <rect x="0" y="0" width="335" height="120" rx="12" fill="url(#newClientGradient)" filter="url(#primaryShadow)"/>
+        
+        <!-- Plus Icon -->
+        <g transform="translate(25, 30)">
+          <circle cx="25" cy="25" r="25" fill="rgba(255,255,255,0.2)"/>
+          <path d="M25 15 L25 35 M15 25 L35 25" stroke="white" stroke-width="3" stroke-linecap="round"/>
+        </g>
+        
+        <!-- Text -->
+        <text x="80" y="45" font-family="-apple-system, sans-serif" font-size="22" font-weight="700" fill="white">New Client</text>
+        <text x="80" y="68" font-family="-apple-system, sans-serif" font-size="16" font-weight="500" fill="rgba(255,255,255,0.9)">Add a client to start tracking</text>
+      </g>
+      
+      <!-- View Clients & Start Session Row -->
+      <g transform="translate(0, 140)">
+        
+        <!-- View Clients Card -->
+        <g id="view-clients-card">
+          <rect x="0" y="0" width="160" height="120" rx="12" fill="url(#viewClientsGradient)" filter="url(#primaryShadow)"/>
+          
+          <!-- People Icon -->
+          <g transform="translate(25, 25)">
+            <rect x="0" y="0" width="40" height="40" rx="12" fill="rgba(255,255,255,0.2)"/>
+            <circle cx="12" cy="15" r="5" fill="white"/>
+            <circle cx="28" cy="15" r="5" fill="white"/>
+            <path d="M5 32 C5 27 8 24 12 24 C16 24 19 27 19 32" fill="white"/>
+            <path d="M21 32 C21 27 24 24 28 24 C32 24 35 27 35 32" fill="white"/>
+          </g>
+          
+          <text x="20" y="85" font-family="-apple-system, sans-serif" font-size="18" font-weight="700" fill="white">View Clients</text>
+          <text x="20" y="105" font-family="-apple-system, sans-serif" font-size="14" font-weight="500" fill="rgba(255,255,255,0.9)">8 active</text>
+        </g>
+        
+        <!-- Start Session Card -->
+        <g id="start-session-card" transform="translate(175, 0)">
+          <rect x="0" y="0" width="160" height="120" rx="12" fill="url(#watchSessionGradient)" filter="url(#primaryShadow)"/>
+          
+          <!-- Watch Icon -->
+          <g transform="translate(25, 25)">
+            <rect x="0" y="0" width="40" height="40" rx="12" fill="rgba(255,255,255,0.2)"/>
+            <rect x="12" y="10" width="16" height="20" rx="6" stroke="white" stroke-width="2" fill="none"/>
+            <rect x="10" y="15" width="2" height="10" rx="1" fill="white"/>
+            <rect x="28" y="15" width="2" height="10" rx="1" fill="white"/>
+          </g>
+          
+          <text x="20" y="85" font-family="-apple-system, sans-serif" font-size="18" font-weight="700" fill="white">Start Session</text>
+          <text x="20" y="105" font-family="-apple-system, sans-serif" font-size="14" font-weight="500" fill="rgba(255,255,255,0.9)">On Apple Watch</text>
+        </g>
+        
+      </g>
+    </g>
+    
+    <!-- Secondary Info Section -->
+    <g id="secondary-info" transform="translate(20, 300)">
+      
+      <!-- Last Session Card -->
+      <g id="last-session-card">
+        <rect x="0" y="0" width="335" height="80" rx="12" fill="#1C1C1E" filter="url(#cardShadow)"/>
+        
+        <!-- Clock Icon -->
+        <g transform="translate(20, 20)">
+          <circle cx="20" cy="20" r="20" fill="#2C2C2E"/>
+          <circle cx="20" cy="20" r="15" stroke="#8E8E93" stroke-width="2" fill="none"/>
+          <path d="M20 10 L20 20 L26 26" stroke="#8E8E93" stroke-width="2" stroke-linecap="round"/>
+        </g>
+        
+        <!-- Text -->
+        <text x="70" y="30" font-family="-apple-system, sans-serif" font-size="17" font-weight="600" fill="#FFFFFF">Last Session</text>
+        <text x="70" y="50" font-family="-apple-system, sans-serif" font-size="15" font-weight="400" fill="#8E8E93">Sarah M. • 2 hours ago • 85% success</text>
+        
+        <!-- Chevron -->
+        <path d="M305 35 L312 40 L305 45" stroke="#48484A" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+      
+      <!-- Goal Bank Card -->
+      <g id="goal-bank-card" transform="translate(0, 100)">
+        <rect x="0" y="0" width="335" height="80" rx="12" fill="#1C1C1E" filter="url(#cardShadow)"/>
+        
+        <!-- Target Icon -->
+        <g transform="translate(20, 20)">
+          <circle cx="20" cy="20" r="20" fill="#2C2C2E"/>
+          <circle cx="20" cy="20" r="12" stroke="#8E8E93" stroke-width="2" fill="none"/>
+          <circle cx="20" cy="20" r="6" stroke="#8E8E93" stroke-width="2" fill="none"/>
+          <circle cx="20" cy="20" r="2" fill="#8E8E93"/>
+        </g>
+        
+        <!-- Text -->
+        <text x="70" y="30" font-family="-apple-system, sans-serif" font-size="17" font-weight="600" fill="#FFFFFF">Goal Bank</text>
+        <text x="70" y="50" font-family="-apple-system, sans-serif" font-size="15" font-weight="400" fill="#8E8E93">12 custom goals available</text>
+        
+        <!-- Chevron -->
+        <path d="M305 35 L312 40 L305 45" stroke="#48484A" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+      
+    </g>
+  </g>
+  
+  <!-- Tab Bar -->
+  <g id="tab-bar" transform="translate(0, 729)">
+    <!-- Background -->
+    <rect x="0" y="0" width="375" height="83" fill="rgba(28,28,30,0.8)"/>
+    <line x1="0" y1="0" x2="375" y2="0" stroke="#38383A" stroke-width="0.5"/>
+    
+    <!-- Home Tab (Active) -->
+    <g id="tab-home" transform="translate(62.5, 8)">
+      <g transform="translate(0, 8)">
+        <!-- House Icon -->
+        <path d="M12.5 4 L4 12 L21 12 Z" fill="#007AFF"/>
+        <rect x="6" y="12" width="13" height="10" stroke="#007AFF" stroke-width="2" fill="none" rx="1"/>
+        <rect x="10" y="16" width="5" height="6" fill="#007AFF"/>
+      </g>
+      <text x="12.5" y="45" font-family="-apple-system, sans-serif" font-size="10" font-weight="500" fill="#007AFF" text-anchor="middle">Home</text>
+    </g>
+    
+    <!-- Clients Tab -->
+    <g id="tab-clients" transform="translate(187.5, 8)">
+      <g transform="translate(0, 8)">
+        <!-- People Icon -->
+        <circle cx="8" cy="12" r="4" stroke="#8E8E93" stroke-width="2" fill="none"/>
+        <circle cx="17" cy="12" r="4" stroke="#8E8E93" stroke-width="2" fill="none"/>
+        <path d="M2 24 C2 19 5 16 8 16 C11 16 14 19 14 24" stroke="#8E8E93" stroke-width="2" fill="none"/>
+        <path d="M11 24 C11 19 14 16 17 16 C20 16 23 19 23 24" stroke="#8E8E93" stroke-width="2" fill="none"/>
+      </g>
+      <text x="12.5" y="45" font-family="-apple-system, sans-serif" font-size="10" font-weight="500" fill="#8E8E93" text-anchor="middle">Clients</text>
+    </g>
+    
+    <!-- Settings Tab -->
+    <g id="tab-settings" transform="translate(312.5, 8)">
+      <g transform="translate(0, 8)">
+        <!-- Standard Gear Icon -->
+        <circle cx="12.5" cy="15" r="6" stroke="#8E8E93" stroke-width="2" fill="none"/>
+        <circle cx="12.5" cy="15" r="2" fill="#8E8E93"/>
+        <!-- Gear teeth -->
+        <g stroke="#8E8E93" stroke-width="1.5" stroke-linecap="round">
+          <path d="M12.5 5 L12.5 7"/>
+          <path d="M12.5 23 L12.5 25"/>
+          <path d="4.5 15 L6.5 15"/>
+          <path d="18.5 15 L20.5 15"/>
+          <path d="7.5 8 L8.5 9"/>
+          <path d="16.5 21 L17.5 22"/>
+          <path d="17.5 8 L16.5 9"/>
+          <path d="8.5 21 L7.5 22"/>
+        </g>
+      </g>
+      <text x="12.5" y="45" font-family="-apple-system, sans-serif" font-size="10" font-weight="500" fill="#8E8E93" text-anchor="middle">Settings</text>
+    </g>
+  </g>
+  
+  <!-- Home Indicator -->
+  <rect x="134" y="799" width="107" height="5" rx="2.5" fill="#FFFFFF" opacity="0.3"/>
+  
+</svg>
