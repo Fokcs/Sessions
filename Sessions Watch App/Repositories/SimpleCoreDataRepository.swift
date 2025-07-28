@@ -392,7 +392,7 @@ class SimpleCoreDataRepository: ObservableObject, TherapyRepository {
         }
         
         // Fetch goal logs for this session
-        let goalLogs = try fetchGoalLogs(for: sessionId)
+        let goalLogs = try await fetchGoalLogs(for: sessionId)
         
         return Session(
             id: id,
