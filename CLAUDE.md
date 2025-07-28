@@ -5,24 +5,32 @@ Sessions - iOS and watchOS therapy data logging app for speech and ABA therapist
 
 ## Project Structure
 - `Sessions/` - iOS app target
-- `Sessions Watch App/` - watchOS app target  
+  - `Models/` - Swift model structs (duplicated for target access)
+  - `CoreData/` - Core Data stack and model
+  - `Repositories/` - Repository pattern implementation
+- `Sessions Watch App/` - watchOS app target (mirrors iOS structure)
 - `SessionsTests/` - iOS tests
 - `Sessions Watch AppTests/` - watchOS tests
-- `Shared/` - Shared infrastructure
-  - `Models/` - Swift model structs (Client, Session, GoalTemplate, GoalLog, CueLevel)
-  - `CoreData/` - Core Data stack and model (TherapyDataModel.xcdatamodeld)
-  - `Repositories/` - Repository pattern implementation
 - `UI Specs/` - Design specifications
 - `therapy_app_requirements.md` - Requirements document
 - `therapy_runbook_revised.md` - Development guide
+
+**Note**: Shared files are duplicated in each target directory rather than using a Shared folder due to Xcode project configuration complexities.
 
 ## Stage 1 Implementation Status (COMPLETED)
 ✅ App groups and entitlements configured for HIPAA compliance  
 ✅ Core Data model with all entities (Client, GoalTemplate, Session, GoalLog)  
 ✅ CoreDataStack with app group sharing and NSFileProtectionComplete  
 ✅ Swift model structs with proper initializers and computed properties  
-✅ Repository pattern with async/await CoreDataTherapyRepository  
+✅ Repository pattern with async/await SimpleCoreDataRepository  
 ✅ Comprehensive unit tests for foundation layer  
+
+### Stage 1 Issues & Lessons Learned
+⚠️ **Core Data async/await Issues**: Initial CoreDataTherapyRepository had problems with `context.perform` return types. Solution: Use `SimpleCoreDataRepository` with proper async patterns.
+
+⚠️ **Target Architecture**: Shared folder approach failed due to Xcode target configuration. Files are duplicated in each target directory instead.
+
+⚠️ **Test Configuration**: Tests required files to be in main target directory to resolve import scope issues with `@testable import Sessions`.
 
 ## Key Technologies
 - SwiftUI for both platforms
@@ -43,3 +51,28 @@ Sessions - iOS and watchOS therapy data logging app for speech and ABA therapist
 - MVVM architecture with ObservableObject
 - Secure data handling (HIPAA considerations)
 - All Core Data operations use background contexts for writes
+
+## Development Best Practices
+
+### Core Data Guidelines
+- **Use SimpleCoreDataRepository**: Avoid complex `context.perform` return patterns
+- **Background Contexts**: Always use `newBackgroundContext()` for write operations
+- **View Context**: Use `viewContext` only for reads (UI binding)
+- **Error Handling**: Use do-catch blocks in perform closures, don't throw from them
+- **Thread Safety**: Never pass managed objects between contexts
+
+### Testing Guidelines
+- **In-Memory Store**: Use `NSInMemoryStoreType` for unit tests
+- **Test Isolation**: Create fresh Core Data stack for each test
+- **Async Testing**: Use `async throws` test methods for repository testing
+- **Mock Data**: Create test fixtures with realistic data
+
+### File Organization
+- **Duplicate Shared Files**: Copy files to both iOS and watchOS target directories
+- **Consistent Structure**: Mirror directory structure between targets
+- **Target Inclusion**: Ensure all files are included in appropriate targets
+
+### Known Issues to Avoid
+- **Don't use Shared folder**: Xcode target configuration issues
+- **Don't return from context.perform**: Use separate async/await pattern
+- **Don't mix sync/async**: Choose one pattern and stick with it consistently
