@@ -248,11 +248,11 @@ class CoreDataTherapyRepository: ObservableObject, TherapyRepository {
     
     func startSession(for clientId: UUID, location: String?, createdOn: String) async throws -> Session {
         let context = coreDataStack.newBackgroundContext()
+        let sessionId = UUID()
+        let now = Date()
         
-        return try await context.perform {
+        try await context.perform {
             let entity = SessionEntity(context: context)
-            let sessionId = UUID()
-            let now = Date()
             
             entity.id = sessionId
             entity.clientId = clientId
@@ -263,20 +263,20 @@ class CoreDataTherapyRepository: ObservableObject, TherapyRepository {
             entity.lastModified = now
             
             try context.save()
-            
-            return Session(
-                id: sessionId,
-                clientId: clientId,
-                date: now,
-                startTime: now,
-                endTime: nil,
-                location: location,
-                createdOn: createdOn,
-                notes: nil,
-                goalLogs: [],
-                lastModified: now
-            )
         }
+        
+        return Session(
+            id: sessionId,
+            clientId: clientId,
+            date: now,
+            startTime: now,
+            endTime: nil,
+            location: location,
+            createdOn: createdOn,
+            notes: nil,
+            goalLogs: [],
+            lastModified: now
+        )
     }
     
     func endSession(_ sessionId: UUID) async throws {
