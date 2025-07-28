@@ -5,29 +5,31 @@ import CoreData
 final class FoundationTests: XCTestCase {
     
     var repository: CoreDataTherapyRepository!
-    var testStack: CoreDataStack!
+    var testContainer: NSPersistentContainer!
     
     override func setUp() async throws {
         try await super.setUp()
         
         // Create in-memory Core Data stack for testing
-        testStack = CoreDataStack()
-        let container = NSPersistentContainer(name: "TherapyDataModel")
+        testContainer = NSPersistentContainer(name: "TherapyDataModel")
         let description = NSPersistentStoreDescription()
         description.type = NSInMemoryStoreType
-        container.persistentStoreDescriptions = [description]
+        testContainer.persistentStoreDescriptions = [description]
         
-        container.loadPersistentStores { _, error in
+        testContainer.loadPersistentStores { _, error in
             XCTAssertNil(error, "Failed to load test store")
         }
         
-        testStack.persistentContainer = container
+        // Create a custom CoreDataStack for testing
+        let testStack = CoreDataStack.shared
+        testStack.persistentContainer = testContainer
+        
         repository = CoreDataTherapyRepository(coreDataStack: testStack)
     }
     
     override func tearDown() async throws {
         repository = nil
-        testStack = nil
+        testContainer = nil
         try await super.tearDown()
     }
     
