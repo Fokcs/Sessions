@@ -29,7 +29,7 @@ struct ClientsView: View {
                 // Placeholder icon
                 Image(systemName: "person.2.fill")
                     .font(.system(size: 60))
-                    .foregroundStyle(.blue)
+                    .foregroundStyle(.primary)
                 
                 // Title and description
                 VStack(spacing: 12) {

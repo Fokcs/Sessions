@@ -29,7 +29,7 @@ struct GoalsView: View {
                 // Placeholder icon
                 Image(systemName: "target")
                     .font(.system(size: 60))
-                    .foregroundStyle(.green)
+                    .foregroundStyle(.primary)
                 
                 // Title and description
                 VStack(spacing: 12) {

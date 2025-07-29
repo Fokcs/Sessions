@@ -29,7 +29,7 @@ struct SessionsView: View {
                 // Placeholder icon
                 Image(systemName: "clock.fill")
                     .font(.system(size: 60))
-                    .foregroundStyle(.orange)
+                    .foregroundStyle(.primary)
                 
                 // Title and description
                 VStack(spacing: 12) {
