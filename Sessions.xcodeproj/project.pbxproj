@@ -69,6 +69,7 @@
 		C9773D802E372716000A8393 /* Sessions Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Sessions Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9773D8F2E372717000A8393 /* Sessions Watch AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Sessions Watch AppTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9773D992E372717000A8393 /* Sessions Watch AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Sessions Watch AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C9D809382E3884E800F20BB5 /* Untitled.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Untitled.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -153,6 +154,7 @@
 		C9773D542E372714000A8393 = {
 			isa = PBXGroup;
 			children = (
+				C9D809382E3884E800F20BB5 /* Untitled.swift */,
 				C9773D5F2E372714000A8393 /* Sessions */,
 				C9773D6D2E372716000A8393 /* SessionsTests */,
 				C9773D772E372716000A8393 /* SessionsUITests */,
