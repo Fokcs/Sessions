@@ -2,18 +2,48 @@ import XCTest
 import CoreData
 @testable import Sessions
 
+/// Comprehensive test suite for the Sessions app foundation layer
+/// 
+/// **Test Coverage:**
+/// This test class validates the core functionality of the therapy app's foundation:
+/// - Core Data repository operations (CRUD for all entities)
+/// - Swift model struct behavior and computed properties
+/// - Database relationships and data integrity
+/// - Async/await patterns in repository layer
+/// 
+/// **Test Architecture:**
+/// - Uses in-memory Core Data store for fast, isolated tests
+/// - Tests repository pattern through TherapyRepository protocol
+/// - Validates both happy path and edge case scenarios
+/// - Ensures thread safety of async operations
+/// 
+/// **HIPAA Testing Considerations:**
+/// - Tests privacy-focused features like Client.privacyName
+/// - Validates soft delete behavior for audit trail preservation
+/// - Ensures data integrity across repository operations
+/// 
+/// **Stage 1 Validation:**
+/// These tests validate the Stage 1 foundation implementation requirements
+/// and serve as regression tests for future development stages.
 final class FoundationTests: XCTestCase {
     
+    /// Repository instance under test - uses in-memory Core Data store
     var repository: SimpleCoreDataRepository!
+    /// In-memory persistent container for isolated testing
     var testContainer: NSPersistentContainer!
     
+    /// Sets up test environment with in-memory Core Data stack
+    /// 
+    /// **Test Isolation:** Each test gets a fresh in-memory database
+    /// **Performance:** In-memory store provides fast test execution
+    /// **Thread Safety:** Tests async repository operations safely
     override func setUp() async throws {
         try await super.setUp()
         
         // Create in-memory Core Data stack for testing
         testContainer = NSPersistentContainer(name: "TherapyDataModel")
         let description = NSPersistentStoreDescription()
-        description.type = NSInMemoryStoreType
+        description.type = NSInMemoryStoreType  // Fast, isolated test storage
         testContainer.persistentStoreDescriptions = [description]
         
         testContainer.loadPersistentStores { _, error in
@@ -35,6 +65,10 @@ final class FoundationTests: XCTestCase {
     
     // MARK: - Client Tests
     
+    /// Tests basic client creation and retrieval functionality
+    /// 
+    /// **Validates:** Repository CRUD operations and data persistence
+    /// **Covers:** Client model mapping and Core Data entity conversion
     func testCreateAndFetchClient() async throws {
         // Create test client
         let client = Client(name: "John Doe", dateOfBirth: Date(), notes: "Test notes")
@@ -117,6 +151,11 @@ final class FoundationTests: XCTestCase {
         XCTAssertEqual(templates.first?.defaultCueLevel, .independent)
     }
     
+    /// Tests soft delete behavior for goal templates
+    /// 
+    /// **Important:** Goal templates use soft delete (isActive = false)
+    /// rather than hard delete to preserve audit trails and data integrity
+    /// for existing goal logs that reference the template
     func testDeleteGoalTemplate() async throws {
         // Create client and goal template
         let client = Client(name: "John Doe")
@@ -144,6 +183,10 @@ final class FoundationTests: XCTestCase {
     
     // MARK: - Session Tests
     
+    /// Tests complete session lifecycle from start to end
+    /// 
+    /// **Validates:** Session state management and active session tracking
+    /// **Business Logic:** Only one session should be active at a time
     func testStartAndEndSession() async throws {
         // Create client first
         let client = Client(name: "John Doe")
@@ -213,6 +256,10 @@ final class FoundationTests: XCTestCase {
         XCTAssertEqual(goalLogs.first?.notes, "Test notes")
     }
     
+    /// Tests session analytics and goal log aggregation
+    /// 
+    /// **Validates:** Session success rate calculations and trial counting
+    /// **Analytics:** Tests computed properties used for progress tracking
     func testSessionWithGoalLogs() async throws {
         // Create client and start session
         let client = Client(name: "John Doe")
@@ -261,6 +308,10 @@ final class FoundationTests: XCTestCase {
         XCTAssertEqual(CueLevel.maximal.displayName, "Max")
     }
     
+    /// Tests HIPAA-compliant privacy name generation
+    /// 
+    /// **HIPAA Consideration:** privacyName provides reduced PHI exposure
+    /// for use in shared environments or when full names aren't needed
     func testClientPrivacyName() {
         let client = Client(name: "John Doe")
         XCTAssertEqual(client.privacyName, "John D.")
@@ -269,6 +320,10 @@ final class FoundationTests: XCTestCase {
         XCTAssertEqual(singleNameClient.privacyName, "John")
     }
     
+    /// Tests session duration calculation and formatting
+    /// 
+    /// **Validates:** Time interval calculations and human-readable formatting
+    /// **Edge Cases:** Tests both active and completed session states
     func testSessionDuration() {
         let startTime = Date()
         let endTime = Date(timeInterval: 3661, since: startTime) // 1 hour, 1 minute, 1 second

@@ -2,41 +2,86 @@ import CoreData
 import Foundation
 import Combine
 
+/// Core Data implementation of TherapyRepository protocol
+/// 
+/// **Architecture Pattern:**
+/// This class implements the Repository pattern, providing a clean abstraction layer
+/// between the domain models (Swift structs) and Core Data persistence layer.
+/// It handles all database operations while maintaining separation of concerns.
+/// 
+/// **Design Decisions:**
+/// - Uses background contexts for all write operations to prevent UI blocking
+/// - Implements proper async/await patterns for non-blocking database access
+/// - Follows the SimpleCoreDataRepository approach from CLAUDE.md guidelines
+/// - Avoids complex context.perform return patterns that caused Stage 1 issues
+/// 
+/// **HIPAA Compliance:**
+/// - All data operations go through the secure CoreDataStack configuration
+/// - Uses app group containers with NSFileProtectionComplete encryption
+/// - Implements soft deletes for goal templates to preserve audit trails
+/// 
+/// **Thread Safety:**
+/// - Write operations use newBackgroundContext() for thread isolation
+/// - Read operations use viewContext for UI binding compatibility
+/// - No managed objects passed between contexts to prevent threading issues
 class SimpleCoreDataRepository: ObservableObject, TherapyRepository {
+    /// Reference to the shared Core Data stack
+    /// Provides access to persistent container and context management
     private let coreDataStack: CoreDataStack
     
+    /// Initializes repository with Core Data stack dependency
+    /// 
+    /// - Parameter coreDataStack: Core Data stack instance (defaults to shared singleton)
     init(coreDataStack: CoreDataStack = .shared) {
         self.coreDataStack = coreDataStack
     }
     
     // MARK: - Client Operations
     
+    /// Creates a new client record in Core Data
+    /// 
+    /// **Thread Safety:** Uses background context to prevent UI blocking
+    /// **Error Handling:** Prints errors but doesn't throw - consider enhancing for production
+    /// 
+    /// - Parameter client: Client model to persist
+    /// - Throws: Core Data errors (currently handled internally)
     func createClient(_ client: Client) async throws {
         let context = coreDataStack.newBackgroundContext()
         
         await context.perform {
+            // Create new Core Data entity and map from Swift model
             let entity = ClientEntity(context: context)
             entity.id = client.id
             entity.name = client.name
             entity.dateOfBirth = client.dateOfBirth
             entity.notes = client.notes
             entity.createdDate = client.createdDate
-            entity.lastModified = Date()
+            entity.lastModified = Date()  // Update modification timestamp
             
             do {
                 try context.save()
             } catch {
+                // TODO: Implement proper error propagation for production use
                 print("Failed to save client: \(error)")
             }
         }
     }
     
+    /// Retrieves all clients sorted by name
+    /// 
+    /// **Thread Safety:** Uses viewContext for UI-compatible read operations
+    /// **Data Mapping:** Converts Core Data entities to Swift model structs
+    /// 
+    /// - Returns: Array of Client models sorted alphabetically by name
+    /// - Throws: Core Data fetch errors
     func fetchClients() async throws -> [Client] {
         let context = coreDataStack.viewContext
         let request: NSFetchRequest<ClientEntity> = ClientEntity.fetchRequest()
+        // Sort clients alphabetically for consistent UI presentation
         request.sortDescriptors = [NSSortDescriptor(keyPath: \ClientEntity.name, ascending: true)]
         
         let entities = try context.fetch(request)
+        // Convert Core Data entities to Swift models, filtering out invalid records
         return entities.compactMap { entity in
             guard let id = entity.id,
                   let name = entity.name,
@@ -202,6 +247,14 @@ class SimpleCoreDataRepository: ObservableObject, TherapyRepository {
         }
     }
     
+    /// Soft deletes a goal template by setting isActive to false
+    /// 
+    /// **Design Decision:** Uses soft delete instead of hard delete to preserve
+    /// historical data integrity and maintain references from existing goal logs.
+    /// This is important for HIPAA compliance and audit trail requirements.
+    /// 
+    /// - Parameter templateId: UUID of template to deactivate
+    /// - Throws: Core Data errors (currently handled internally)
     func deleteGoalTemplate(_ templateId: UUID) async throws {
         let context = coreDataStack.newBackgroundContext()
         
@@ -213,7 +266,7 @@ class SimpleCoreDataRepository: ObservableObject, TherapyRepository {
                 let entities = try context.fetch(request)
                 guard let entity = entities.first else { return }
                 
-                // Soft delete
+                // Soft delete - preserves data integrity for historical references
                 entity.isActive = false
                 try context.save()
             } catch {
@@ -254,12 +307,24 @@ class SimpleCoreDataRepository: ObservableObject, TherapyRepository {
     
     // MARK: - Session Operations
     
+    /// Creates and starts a new therapy session
+    /// 
+    /// **Session Lifecycle:** Creates active session with no end time
+    /// **Return Value:** Returns Swift model immediately after Core Data save
+    /// 
+    /// - Parameters:
+    ///   - clientId: Associated client identifier
+    ///   - location: Optional session location
+    ///   - createdOn: Device/platform identifier
+    /// - Returns: Newly created Session model
+    /// - Throws: Core Data errors (currently handled internally)
     func startSession(for clientId: UUID, location: String?, createdOn: String) async throws -> Session {
         let sessionId = UUID()
         let now = Date()
         let context = coreDataStack.newBackgroundContext()
         
         await context.perform {
+            // Create active session entity (endTime remains nil)
             let entity = SessionEntity(context: context)
             entity.id = sessionId
             entity.clientId = clientId
@@ -268,6 +333,7 @@ class SimpleCoreDataRepository: ObservableObject, TherapyRepository {
             entity.location = location
             entity.createdOn = createdOn
             entity.lastModified = now
+            // Note: endTime intentionally left nil to indicate active session
             
             do {
                 try context.save()
@@ -343,11 +409,19 @@ class SimpleCoreDataRepository: ObservableObject, TherapyRepository {
         }
     }
     
+    /// Retrieves the currently active session (if any)
+    /// 
+    /// **Business Logic:** Only one session should be active at a time
+    /// **Query:** Finds sessions where endTime is nil
+    /// 
+    /// - Returns: Active Session model or nil if no active session exists
+    /// - Throws: Core Data fetch errors
     func fetchActiveSession() async throws -> Session? {
         let context = coreDataStack.viewContext
         let request: NSFetchRequest<SessionEntity> = SessionEntity.fetchRequest()
+        // Find sessions without end time (active sessions)
         request.predicate = NSPredicate(format: "endTime == nil")
-        request.fetchLimit = 1
+        request.fetchLimit = 1  // Should only be one active session
         
         let entities = try context.fetch(request)
         guard let entity = entities.first,
@@ -410,19 +484,27 @@ class SimpleCoreDataRepository: ObservableObject, TherapyRepository {
     
     // MARK: - Goal Log Operations
     
+    /// Records a goal attempt/trial within a therapy session
+    /// 
+    /// **Core Functionality:** This is the primary data entry point during therapy sessions
+    /// **Real-time Logging:** Creates immediate record of therapeutic interactions
+    /// 
+    /// - Parameter goalLog: GoalLog model containing attempt details
+    /// - Throws: Core Data errors (currently handled internally)
     func logGoal(_ goalLog: GoalLog) async throws {
         let context = coreDataStack.newBackgroundContext()
         
         await context.perform {
+            // Create goal log entity with complete attempt details
             let entity = GoalLogEntity(context: context)
             entity.id = goalLog.id
-            entity.goalTemplateId = goalLog.goalTemplateId
-            entity.goalDescription = goalLog.goalDescription
-            entity.cueLevel = goalLog.cueLevel.rawValue
-            entity.wasSuccessful = goalLog.wasSuccessful
-            entity.sessionId = goalLog.sessionId
-            entity.timestamp = goalLog.timestamp
-            entity.notes = goalLog.notes
+            entity.goalTemplateId = goalLog.goalTemplateId  // Optional - may be nil for ad-hoc goals
+            entity.goalDescription = goalLog.goalDescription  // Always stored for data integrity
+            entity.cueLevel = goalLog.cueLevel.rawValue  // Convert enum to string
+            entity.wasSuccessful = goalLog.wasSuccessful  // Core outcome measure
+            entity.sessionId = goalLog.sessionId  // Links to containing session
+            entity.timestamp = goalLog.timestamp  // Precise timing for analysis
+            entity.notes = goalLog.notes  // Optional attempt-specific observations
             
             do {
                 try context.save()
