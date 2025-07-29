@@ -9,32 +9,47 @@ import SwiftUI
 
 /// Main content view for the Sessions iOS application
 /// 
-/// **Current State:** Placeholder implementation with basic "Hello, world!" content
+/// **Current State:** TabView navigation structure with Clients, Goals, and Sessions tabs
 /// 
-/// **Future Implementation (Stage 2+):**
-/// This view will serve as the primary navigation hub for the therapy app, containing:
-/// - Client management interface
-/// - Active session controls
-/// - Session history and progress tracking
-/// - Goal template management
+/// **Implementation (Stage 2):**
+/// This view serves as the primary navigation hub for the therapy app, containing:
+/// - Client management interface (ClientsView)
+/// - Goal template management (GoalsView)  
+/// - Session history and tracking (SessionsView)
 /// 
 /// **Architecture Notes:**
-/// - Follows SwiftUI declarative UI patterns
-/// - Will integrate with repository pattern for data access
+/// - Follows SwiftUI declarative UI patterns with TabView navigation
+/// - Each tab contains its own NavigationStack for proper navigation hierarchy
+/// - Integrates with repository pattern for data access (future enhancement)
 /// - Designed for MVVM architecture with ObservableObject ViewModels
-/// - Will support iOS-specific navigation patterns (TabView, NavigationStack)
+/// - Supports iOS-specific navigation patterns and accessibility
 struct ContentView: View {
     var body: some View {
-        VStack {
-            // Placeholder globe icon - will be replaced with therapy-specific iconography
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
+        TabView {
+            ClientsView()
+                .tabItem {
+                    Image(systemName: "person.2.fill")
+                    Text("Clients")
+                }
+                .accessibilityLabel("Clients tab")
+                .accessibilityHint("Manage therapy clients")
             
-            // Placeholder text - will be replaced with actual app content
-            Text("Hello, world!")
+            GoalsView()
+                .tabItem {
+                    Image(systemName: "target")
+                    Text("Goals")
+                }
+                .accessibilityLabel("Goals tab")
+                .accessibilityHint("Manage goal templates")
+            
+            SessionsView()
+                .tabItem {
+                    Image(systemName: "clock.fill")
+                    Text("Sessions")
+                }
+                .accessibilityLabel("Sessions tab")
+                .accessibilityHint("View session history")
         }
-        .padding()
     }
 }
 
