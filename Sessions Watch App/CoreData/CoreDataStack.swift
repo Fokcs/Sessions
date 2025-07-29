@@ -1,6 +1,17 @@
 import CoreData
 import Foundation
 
+/// watchOS Core Data stack - identical to iOS implementation
+/// 
+/// **File Duplication Note:** This file is intentionally duplicated from the iOS target
+/// rather than shared, as documented in CLAUDE.md. Xcode project configuration
+/// complexities made shared folders impractical for this project structure.
+/// 
+/// **Shared Data Access:** Both iOS and watchOS apps access the same app group
+/// container, enabling seamless data sharing and synchronization between platforms.
+/// 
+/// **Implementation:** See iOS CoreDataStack.swift for detailed documentation
+/// of HIPAA compliance features, thread safety patterns, and architectural decisions.
 class CoreDataStack: ObservableObject {
     static let shared = CoreDataStack()
     

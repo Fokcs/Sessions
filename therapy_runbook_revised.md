@@ -794,7 +794,15 @@ class CoreDataTherapyRepository: ObservableObject, TherapyRepository {
 
 ### Step 1.7: Create Basic Unit Tests
 
-**Action**: Create unit tests in `Tests/FoundationTests.swift`
+**Action**: Use the swiftui-test-generator agent to create comprehensive unit tests for foundation layer components
+
+**Note**: The SwiftUI test generator agent should be used to create unit tests for:
+- Core Data repository operations
+- Swift model structs and computed properties
+- CoreDataStack functionality
+- Async/await patterns in repository methods
+
+**Fallback**: If agent is unavailable, create unit tests in `Tests/FoundationTests.swift`
 
 ```swift
 import XCTest
