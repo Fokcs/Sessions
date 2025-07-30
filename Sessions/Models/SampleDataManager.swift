@@ -1,9 +1,9 @@
 import Foundation
 
 class SampleDataManager {
-    private let repository: TherapyRepository
+    private let repository: any TherapyRepository
     
-    init(repository: TherapyRepository = SimpleCoreDataRepository.shared) {
+    init(repository: any TherapyRepository = SimpleCoreDataRepository.shared) {
         self.repository = repository
     }
     
@@ -65,6 +65,7 @@ class SampleDataManager {
             }
             
             return Client(
+                id: UUID(),
                 name: clientData.name,
                 dateOfBirth: dateOfBirth,
                 notes: clientData.notes,
