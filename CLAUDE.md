@@ -41,8 +41,8 @@ Sessions - iOS and watchOS therapy data logging app for speech and ABA therapist
 - Bundle ID: `com.AAFU.Sessions`
 
 ## Build Commands
-- Build: `xcodebuild -project Sessions.xcodeproj -scheme Sessions build`
-- Test: `xcodebuild -project Sessions.xcodeproj -scheme Sessions test`
+- Build: `xcodebuild -project Sessions.xcodeproj -scheme Sessions -destination 'platform=iOS Simulator,name=iPhone 16' build`
+- Test: `xcodebuild -project Sessions.xcodeproj -scheme Sessions -destination 'platform=iOS Simulator,name=iPhone 16' test`
 - Clean: `xcodebuild -project Sessions.xcodeproj clean`
 
 ## Code Guidelines
