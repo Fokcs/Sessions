@@ -3,6 +3,10 @@ import Foundation
 import Combine
 
 class SimpleCoreDataRepository: ObservableObject, TherapyRepository {
+    /// Shared singleton instance for app-wide repository access
+    /// Using singleton pattern ensures consistent data access across ViewModels
+    static let shared = SimpleCoreDataRepository()
+    
     private let coreDataStack: CoreDataStack
     
     init(coreDataStack: CoreDataStack = .shared) {

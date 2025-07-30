@@ -25,6 +25,10 @@ import Combine
 /// - Read operations use viewContext for UI binding compatibility
 /// - No managed objects passed between contexts to prevent threading issues
 class SimpleCoreDataRepository: ObservableObject, TherapyRepository {
+    /// Shared singleton instance for app-wide repository access
+    /// Using singleton pattern ensures consistent data access across ViewModels
+    static let shared = SimpleCoreDataRepository()
+    
     /// Reference to the shared Core Data stack
     /// Provides access to persistent container and context management
     private let coreDataStack: CoreDataStack
