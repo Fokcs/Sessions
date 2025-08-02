@@ -1,9 +1,9 @@
 import Foundation
 
 class SampleDataManager {
-    private let repository: any TherapyRepository
+    private let repository: SimpleCoreDataRepository
     
-    init(repository: any TherapyRepository = SimpleCoreDataRepository.shared) {
+    init(repository: SimpleCoreDataRepository = SimpleCoreDataRepository.shared) {
         self.repository = repository
     }
     

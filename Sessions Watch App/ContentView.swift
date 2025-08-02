@@ -30,7 +30,7 @@ import SwiftUI
 /// - Optimized for therapist's non-dominant hand usage
 /// - Quick access to most frequently used therapy logging functions
 struct ContentView: View {
-    @State private var repository: TherapyRepository?
+    @State private var repository: SimpleCoreDataRepository?
     @State private var isLoading = true
     
     var body: some View {
@@ -68,7 +68,7 @@ struct ContentView: View {
         Task {
             do {
                 let coreDataStack = try CoreDataStack()
-                let therapyRepository = try TherapyRepository(coreDataStack: coreDataStack)
+                let therapyRepository = SimpleCoreDataRepository(coreDataStack: coreDataStack)
                 
                 await MainActor.run {
                     self.repository = therapyRepository

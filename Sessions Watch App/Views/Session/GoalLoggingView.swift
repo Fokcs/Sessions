@@ -145,7 +145,7 @@ struct GoalLoggingView: View {
             
             // Current goal description
             if let goal = sessionViewModel.currentGoal {
-                Text(goal.description)
+                Text(goal.description ?? "Unknown Goal")
                     .font(.system(size: 16, weight: .bold))
                     .foregroundColor(.white)
                     .multilineTextAlignment(.center)

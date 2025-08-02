@@ -208,7 +208,7 @@ class SessionViewModel: ObservableObject {
                 return nil
             }
             return GoalPerformance(
-                goalName: goal.description,
+                goalName: goal.description ?? "Unknown Goal",
                 successCount: stats.successCount,
                 totalCount: stats.totalCount
             )
