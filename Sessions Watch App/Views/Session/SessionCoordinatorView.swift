@@ -139,8 +139,7 @@ struct SessionCoordinatorView: View {
 
 struct SessionCoordinatorView_Previews: PreviewProvider {
     static var previews: some View {
-        let stack = try! CoreDataStack(inMemory: true)
-        let repository = try! TherapyRepository(coreDataStack: stack)
+        let repository = SimpleCoreDataRepository.shared
         
         return SessionCoordinatorView(repository: repository)
             .previewDevice("Apple Watch Series 7 - 45mm")
