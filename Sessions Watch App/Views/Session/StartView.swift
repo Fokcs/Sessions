@@ -315,8 +315,7 @@ struct StartView: View {
         }
         
         // Add haptic feedback
-        let impact = UIImpactFeedbackGenerator(style: .light)
-        impact.impactOccurred()
+        HapticManager.shared.clientSelected()
     }
     
     private func startSession() {

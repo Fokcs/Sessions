@@ -88,8 +88,7 @@ struct SessionCoordinatorView: View {
         }
         
         // Add haptic feedback
-        let impact = UIImpactFeedbackGenerator(style: .medium)
-        impact.impactOccurred()
+        HapticManager.shared.sessionEnd()
     }
     
     private func startNewSession() {
@@ -102,8 +101,7 @@ struct SessionCoordinatorView: View {
         }
         
         // Add haptic feedback
-        let impact = UIImpactFeedbackGenerator(style: .light)
-        impact.impactOccurred()
+        HapticManager.shared.navigate()
     }
     
     private func shareSession() {
@@ -117,8 +115,7 @@ struct SessionCoordinatorView: View {
         print("Sharing session: \(shareText)")
         
         // Add haptic feedback
-        let impact = UIImpactFeedbackGenerator(style: .light)
-        impact.impactOccurred()
+        HapticManager.shared.navigate()
         
         // For now, just show a confirmation
         // TODO: Implement actual sharing functionality

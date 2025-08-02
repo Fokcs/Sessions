@@ -59,8 +59,7 @@ class SessionViewModel: ObservableObject {
         startSessionTimer()
         
         // Add haptic feedback
-        let impact = UIImpactFeedbackGenerator(style: .medium)
-        impact.impactOccurred()
+        HapticManager.shared.sessionStart()
     }
     
     func endSession() {
@@ -84,8 +83,7 @@ class SessionViewModel: ObservableObject {
         undoButtonEnabled = false
         
         // Add haptic feedback
-        let impact = UIImpactFeedbackGenerator(style: .light)
-        impact.impactOccurred()
+        HapticManager.shared.sessionEnd()
     }
     
     private func startSessionTimer() {
@@ -131,8 +129,11 @@ class SessionViewModel: ObservableObject {
         showingCueLevelPicker = true
         
         // Add haptic feedback
-        let impact = UIImpactFeedbackGenerator(style: .light)
-        impact.impactOccurred()
+        if wasSuccessful {
+            HapticManager.shared.trialSuccess()
+        } else {
+            HapticManager.shared.trialFailure()
+        }
     }
     
     func addTrialWithCueLevel(_ cueLevel: CueLevel) {
@@ -144,8 +145,7 @@ class SessionViewModel: ObservableObject {
         undoButtonEnabled = true
         
         // Add haptic feedback for completion
-        let impact = UIImpactFeedbackGenerator(style: .light)
-        impact.impactOccurred()
+        HapticManager.shared.cueLevelSelected()
     }
     
     func undoLastTrial() {
@@ -156,8 +156,7 @@ class SessionViewModel: ObservableObject {
             undoButtonEnabled = session.totalTrials > 0
             
             // Add haptic feedback
-            let impact = UIImpactFeedbackGenerator(style: .light)
-            impact.impactOccurred()
+            HapticManager.shared.undoAction()
         }
     }
     

@@ -144,8 +144,7 @@ struct CueLevelPickerView: View {
         timer?.invalidate()
         
         // Add haptic feedback
-        let impact = UIImpactFeedbackGenerator(style: .light)
-        impact.impactOccurred()
+        HapticManager.shared.cueLevelSelected()
         
         // Visual feedback with scaling animation
         withAnimation(.easeInOut(duration: 0.2)) {
@@ -176,8 +175,7 @@ struct CueLevelPickerView: View {
         selectedLevel = .independent
         
         // Add haptic feedback for auto-selection
-        let impact = UIImpactFeedbackGenerator(style: .light)
-        impact.impactOccurred()
+        HapticManager.shared.autoTimeout()
         
         // Brief animation for auto-selection
         withAnimation(.easeInOut(duration: 0.2)) {
