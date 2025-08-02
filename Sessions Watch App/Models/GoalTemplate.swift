@@ -7,7 +7,7 @@ struct GoalTemplate: Identifiable, Codable, Equatable {
     let category: String
     let defaultCueLevel: CueLevel
     let clientId: UUID
-    let isActive: Bool
+    var isActive: Bool
     let createdDate: Date
     
     init(

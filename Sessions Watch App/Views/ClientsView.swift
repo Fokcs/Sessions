@@ -47,7 +47,7 @@ struct ClientsView: View {
                 Task { await viewModel.retryLastOperation() }
             }
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .topBarTrailing) {
                     Button(action: {
                         showingCreateClient = true
                     }) {

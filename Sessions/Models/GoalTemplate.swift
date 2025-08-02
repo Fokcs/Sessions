@@ -46,7 +46,7 @@ struct GoalTemplate: Identifiable, Codable, Equatable {
     
     /// Indicates if this goal template is currently active
     /// Inactive templates are hidden from session selection but preserved for historical data
-    let isActive: Bool
+    var isActive: Bool
     
     /// Timestamp when goal template was created
     /// Used for sorting and audit trail purposes

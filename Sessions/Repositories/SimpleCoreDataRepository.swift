@@ -419,6 +419,44 @@ class SimpleCoreDataRepository: ObservableObject, TherapyRepository {
         }
     }
     
+    func fetchAllGoalTemplates() async throws -> [GoalTemplate] {
+        let context = coreDataStack.viewContext
+        let request: NSFetchRequest<GoalTemplateEntity> = GoalTemplateEntity.fetchRequest()
+        // No predicate - fetch all goal templates (active and inactive)
+        request.sortDescriptors = [
+            NSSortDescriptor(keyPath: \GoalTemplateEntity.isActive, ascending: false), // Active first
+            NSSortDescriptor(keyPath: \GoalTemplateEntity.title, ascending: true)
+        ]
+        
+        do {
+            let entities = try context.fetch(request)
+            return entities.compactMap { entity in
+                guard let id = entity.id,
+                      let title = entity.title,
+                      let category = entity.category,
+                      let defaultCueLevelString = entity.defaultCueLevel,
+                      let defaultCueLevel = CueLevel(rawValue: defaultCueLevelString),
+                      let clientId = entity.clientId,
+                      let createdDate = entity.createdDate else {
+                    return nil
+                }
+                
+                return GoalTemplate(
+                    id: id,
+                    title: title,
+                    description: entity.goalDescription,
+                    category: category,
+                    defaultCueLevel: defaultCueLevel,
+                    clientId: clientId,
+                    isActive: entity.isActive,
+                    createdDate: createdDate
+                )
+            }
+        } catch {
+            throw TherapyAppError.fetchFailure(error as NSError)
+        }
+    }
+    
     // MARK: - Session Operations
     
     /// Creates and starts a new therapy session

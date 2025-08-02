@@ -60,7 +60,7 @@ class ClientListViewModel: ObservableObject {
         } catch let therapyError as TherapyAppError {
             error = therapyError
         } catch {
-            error = .fetchFailure(error as NSError)
+            self.error = .fetchFailure(error as NSError)
         }
         
         isLoading = false
@@ -84,7 +84,7 @@ class ClientListViewModel: ObservableObject {
         } catch let therapyError as TherapyAppError {
             error = therapyError
         } catch {
-            error = .saveFailure(error as NSError)
+            self.error = .saveFailure(error as NSError)
         }
     }
     

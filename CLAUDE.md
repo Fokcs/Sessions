@@ -24,7 +24,6 @@ Sessions - iOS and watchOS therapy data logging app for speech and ABA therapist
 ✅ Swift model structs with proper initializers and computed properties  
 ✅ Repository pattern with async/await SimpleCoreDataRepository  
 ✅ Comprehensive unit tests for foundation layer  
-✅ SwiftUI test generator agent available for automated test creation  
 
 ### Stage 1 Issues & Lessons Learned
 ⚠️ **Core Data async/await Issues**: Initial CoreDataTherapyRepository had problems with `context.perform` return types. Solution: Use `SimpleCoreDataRepository` with proper async patterns.
@@ -41,8 +40,8 @@ Sessions - iOS and watchOS therapy data logging app for speech and ABA therapist
 - Bundle ID: `com.AAFU.Sessions`
 
 ## Build Commands
-- Build: `xcodebuild -project Sessions.xcodeproj -scheme Sessions -destination 'platform=iOS Simulator,name=iPhone 16' build`
-- Test: `xcodebuild -project Sessions.xcodeproj -scheme Sessions -destination 'platform=iOS Simulator,name=iPhone 16' test`
+- Build: `xcodebuild -project Sessions.xcodeproj -scheme Sessions build`
+- Test: `xcodebuild -project Sessions.xcodeproj -scheme Sessions test`
 - Clean: `xcodebuild -project Sessions.xcodeproj clean`
 
 ## Code Guidelines
@@ -52,7 +51,6 @@ Sessions - iOS and watchOS therapy data logging app for speech and ABA therapist
 - MVVM architecture with ObservableObject
 - Secure data handling (HIPAA considerations)
 - All Core Data operations use background contexts for writes
-- **Test Creation**: Use swiftui-test-generator agent for comprehensive test coverage of new components
 
 ## Development Best Practices
 
@@ -64,18 +62,10 @@ Sessions - iOS and watchOS therapy data logging app for speech and ABA therapist
 - **Thread Safety**: Never pass managed objects between contexts
 
 ### Testing Guidelines
-- **SwiftUI Test Generator Agent**: Use the specialized `swiftui-test-generator` agent for creating comprehensive unit tests for SwiftUI components, ViewModels, and data layer components
-- **Agent Delegation**: When test creation is needed, delegate to the test generator agent rather than writing tests manually
-- **Test Coverage Areas**: Agent handles SwiftUI views, ViewModels, repository patterns, Core Data operations, and async/await testing
 - **In-Memory Store**: Use `NSInMemoryStoreType` for unit tests
 - **Test Isolation**: Create fresh Core Data stack for each test
 - **Async Testing**: Use `async throws` test methods for repository testing
 - **Mock Data**: Create test fixtures with realistic data
-
-### Test Generation Workflow
-- **When to Use Agent**: Delegate test creation for new SwiftUI components, ViewModels, repositories, or Core Data entities
-- **Agent Capabilities**: Comprehensive test suites with proper iOS/watchOS testing patterns, async/await support, and Core Data testing
-- **Integration**: Agent-generated tests follow existing project conventions and testing standards
 
 ### File Organization
 - **Duplicate Shared Files**: Copy files to both iOS and watchOS target directories

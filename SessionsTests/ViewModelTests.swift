@@ -925,6 +925,7 @@ class MockTherapyRepository: TherapyRepository {
     // MARK: - Error Control
     var shouldThrowError = false
     var shouldThrowErrorOnGoalTemplates = false
+    var therapyErrorToThrow: TherapyAppError?
     
     // MARK: - Operation Tracking
     var createdClients: [Client] = []
@@ -945,8 +946,11 @@ class MockTherapyRepository: TherapyRepository {
     }
     
     func fetchClients() async throws -> [Client] {
+        if let therapyError = therapyErrorToThrow {
+            throw therapyError
+        }
         if shouldThrowError {
-            throw MockRepositoryError.operationFailed("Mock fetch clients error")
+            throw MockRepositoryError.operationFailed("Failed to load clients")
         }
         return mockClients
     }
@@ -962,8 +966,11 @@ class MockTherapyRepository: TherapyRepository {
     }
     
     func deleteClient(_ clientId: UUID) async throws {
+        if let therapyError = therapyErrorToThrow {
+            throw therapyError
+        }
         if shouldThrowError {
-            throw MockRepositoryError.operationFailed("Mock delete client error")
+            throw MockRepositoryError.operationFailed("Failed to delete client")
         }
         deletedClientIds.append(clientId)
         mockClients.removeAll { $0.id == clientId }
@@ -987,8 +994,11 @@ class MockTherapyRepository: TherapyRepository {
     }
     
     func fetchGoalTemplates(for clientId: UUID) async throws -> [GoalTemplate] {
+        if let therapyError = therapyErrorToThrow {
+            throw therapyError
+        }
         if shouldThrowErrorOnGoalTemplates || shouldThrowError {
-            throw MockRepositoryError.operationFailed("Mock fetch goal templates error")
+            throw MockRepositoryError.operationFailed("Failed to load goal templates")
         }
         return mockGoalTemplates.filter { $0.clientId == clientId }
     }
@@ -1004,8 +1014,11 @@ class MockTherapyRepository: TherapyRepository {
     }
     
     func deleteGoalTemplate(_ goalTemplateId: UUID) async throws {
+        if let therapyError = therapyErrorToThrow {
+            throw therapyError
+        }
         if shouldThrowError {
-            throw MockRepositoryError.operationFailed("Mock delete goal template error")
+            throw MockRepositoryError.operationFailed("Failed to delete goal template")
         }
         deletedGoalTemplateIds.append(goalTemplateId)
         mockGoalTemplates.removeAll { $0.id == goalTemplateId }
