@@ -60,26 +60,7 @@ struct GoalsView: View {
                 Task { await viewModel.retryLastOperation() }
             }
             .toolbar {
-                ToolbarItemGroup(placement: .navigationBarTrailing) {
-                    Menu {
-                        ForEach(viewModel.availableCategories, id: \.self) { category in
-                            Button(action: {
-                                viewModel.selectedCategory = category
-                            }) {
-                                HStack {
-                                    Text(category)
-                                    if viewModel.selectedCategory == category {
-                                        Image(systemName: "checkmark")
-                                    }
-                                }
-                            }
-                        }
-                    } label: {
-                        Image(systemName: "line.3.horizontal.decrease.circle")
-                    }
-                    .accessibilityLabel("Filter by category")
-                    .accessibilityHint("Filter goal templates by therapy category")
-                    
+                ToolbarItemGroup(placement: .topBarTrailing) {
                     Button(action: { showingClientSelection = true }) {
                         Image(systemName: "plus")
                     }
@@ -442,7 +423,7 @@ private struct ClientSelectionView: View {
             .navigationTitle("Select Client")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
+                ToolbarItem(placement: .topBarLeading) {
                     Button("Cancel") {
                         isPresented = false
                     }

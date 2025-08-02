@@ -202,7 +202,7 @@ struct ErrorBanner: View {
         } else if error.category == "Validation" {
             return .blue.opacity(0.1)
         } else {
-            return Color(.systemGray6)
+            return Color.gray.opacity(0.1)
         }
     }
 }

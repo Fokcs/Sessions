@@ -159,7 +159,7 @@ struct ErrorRecoveryView: View {
                             .fontWeight(.medium)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 16)
-                            .background(Color(.systemGray6))
+                            .background(Color.gray.opacity(0.1))
                             .foregroundStyle(.primary)
                             .clipShape(RoundedRectangle(cornerRadius: 12))
                     }
@@ -170,7 +170,7 @@ struct ErrorRecoveryView: View {
             .padding(.bottom, 32)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(.systemBackground))
+        .background(Color.black)
     }
     
     // MARK: - Private Computed Properties

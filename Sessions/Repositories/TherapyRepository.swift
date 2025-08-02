@@ -65,6 +65,11 @@ protocol TherapyRepository: ObservableObject {
     /// - Throws: Data access errors
     func fetchGoalTemplates(for clientId: UUID) async throws -> [GoalTemplate]
     
+    /// Retrieves all goal templates across all clients
+    /// - Returns: Array of all GoalTemplate models (active and inactive)
+    /// - Throws: Data access errors
+    func fetchAllGoalTemplates() async throws -> [GoalTemplate]
+    
     /// Updates an existing goal template
     /// - Parameter template: Updated template model
     /// - Throws: Persistence errors or template not found

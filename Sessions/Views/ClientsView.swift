@@ -23,6 +23,7 @@ import SwiftUI
 /// - Supports iOS navigation patterns and VoiceOver accessibility
 struct ClientsView: View {
     @StateObject private var viewModel = ClientListViewModel()
+    @State private var showingCreateClient = false
     
     var body: some View {
         NavigationStack {
@@ -32,7 +33,7 @@ struct ClientsView: View {
                 } else if viewModel.filteredClients.isEmpty {
                     EmptyStateView(isSearchActive: !viewModel.searchText.isEmpty)
                 } else {
-                    ClientListView(clients: viewModel.filteredClients)
+                    ClientListView(clients: viewModel.filteredClients, viewModel: viewModel)
                 }
             }
             .navigationTitle("Clients")
@@ -48,7 +49,7 @@ struct ClientsView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
-                        // TODO: Navigation to ClientEditView (future enhancement)
+                        showingCreateClient = true
                     }) {
                         Image(systemName: "plus")
                     }
@@ -59,6 +60,12 @@ struct ClientsView: View {
         }
         .task {
             await viewModel.loadClients()
+        }
+        .sheet(isPresented: $showingCreateClient) {
+            ClientEditView(client: nil, isPresented: $showingCreateClient) {
+                // Refresh client list after creation
+                Task { await viewModel.refreshClients() }
+            }
         }
     }
 }
@@ -117,17 +124,45 @@ private struct EmptyStateView: View {
 /// List view displaying client entries with navigation links
 private struct ClientListView: View {
     let clients: [Client]
+    @ObservedObject var viewModel: ClientListViewModel
+    @State private var clientToDelete: Client?
+    @State private var showingDeleteConfirmation = false
     
     var body: some View {
         List(clients) { client in
-            NavigationLink(destination: ClientDetailViewPlaceholder(client: client)) {
+            NavigationLink(destination: ClientDetailView(clientId: client.id)) {
                 ClientRowView(client: client)
             }
             .accessibilityElement(children: .combine)
             .accessibilityLabel("Client: \(client.displayName), \(client.displayDetails)")
             .accessibilityHint("Tap to view client details")
+            .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                Button("Delete", role: .destructive) {
+                    clientToDelete = client
+                    showingDeleteConfirmation = true
+                }
+                .accessibilityLabel("Delete \(client.displayName)")
+                .accessibilityHint("Permanently delete this client and all associated data")
+            }
         }
         .listStyle(.plain)
+        .alert("Delete Client", isPresented: $showingDeleteConfirmation) {
+            Button("Cancel", role: .cancel) {
+                clientToDelete = nil
+            }
+            Button("Delete", role: .destructive) {
+                if let client = clientToDelete {
+                    Task {
+                        await viewModel.deleteClient(client)
+                        clientToDelete = nil
+                    }
+                }
+            }
+        } message: {
+            if let client = clientToDelete {
+                Text("Are you sure you want to delete \(client.displayName)? This action cannot be undone and will remove all associated goal templates and session data.")
+            }
+        }
     }
 }
 
@@ -149,30 +184,6 @@ private struct ClientRowView: View {
     }
 }
 
-/// Placeholder view for client detail navigation (future implementation)
-private struct ClientDetailViewPlaceholder: View {
-    let client: Client
-    
-    var body: some View {
-        VStack(spacing: 20) {
-            Image(systemName: "person.circle.fill")
-                .font(.system(size: 80))
-                .foregroundStyle(.primary)
-            
-            Text(client.displayName)
-                .font(.largeTitle)
-                .fontWeight(.bold)
-            
-            Text("Client details will be implemented in a future update")
-                .font(.body)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal)
-        }
-        .navigationTitle("Client Details")
-        .navigationBarTitleDisplayMode(.inline)
-    }
-}
 
 /// SwiftUI preview for ClientsView
 /// Provides design-time preview in Xcode canvas for rapid UI development

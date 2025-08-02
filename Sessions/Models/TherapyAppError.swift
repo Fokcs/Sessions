@@ -15,7 +15,7 @@ import CoreData
 /// **Usage:**
 /// Replace generic Swift errors with TherapyAppError throughout the app to provide
 /// consistent, user-friendly error presentation and recovery options.
-enum TherapyAppError: LocalizedError {
+enum TherapyAppError: LocalizedError, Equatable {
     // MARK: - Core Data Errors
     
     /// Core Data save operation failed
@@ -313,6 +313,68 @@ enum TherapyAppError: LocalizedError {
             return "Network"
         case .unknown, .cancelled:
             return "Generic"
+        }
+    }
+    
+    // MARK: - Equatable Implementation
+    
+    /// Custom Equatable implementation for TherapyAppError
+    /// NSError cases are compared by domain and code for functional equivalence
+    static func == (lhs: TherapyAppError, rhs: TherapyAppError) -> Bool {
+        switch (lhs, rhs) {
+        // Core Data Errors
+        case (.saveFailure(let lError), .saveFailure(let rError)):
+            return lError.domain == rError.domain && lError.code == rError.code
+        case (.fetchFailure(let lError), .fetchFailure(let rError)):
+            return lError.domain == rError.domain && lError.code == rError.code
+        case (.contextSyncFailure(let lError), .contextSyncFailure(let rError)):
+            return lError.domain == rError.domain && lError.code == rError.code
+        case (.persistentStoreError(let lError), .persistentStoreError(let rError)):
+            return lError.domain == rError.domain && lError.code == rError.code
+            
+        // Validation Errors
+        case (.validationError(let lField, let lReason), .validationError(let rField, let rReason)):
+            return lField == rField && lReason == rReason
+        case (.clientNameRequired, .clientNameRequired):
+            return true
+        case (.goalTitleRequired, .goalTitleRequired):
+            return true
+        case (.invalidCueLevel, .invalidCueLevel):
+            return true
+            
+        // Business Logic Errors
+        case (.clientNotFound(let lId), .clientNotFound(let rId)):
+            return lId == rId
+        case (.goalTemplateNotFound(let lId), .goalTemplateNotFound(let rId)):
+            return lId == rId
+        case (.sessionNotFound(let lId), .sessionNotFound(let rId)):
+            return lId == rId
+        case (.sessionAlreadyActive, .sessionAlreadyActive):
+            return true
+        case (.noActiveSession, .noActiveSession):
+            return true
+        case (.clientHasSessions, .clientHasSessions):
+            return true
+        case (.goalTemplateHasLogs, .goalTemplateHasLogs):
+            return true
+            
+        // Network Errors
+        case (.networkUnavailable, .networkUnavailable):
+            return true
+        case (.operationTimeout, .operationTimeout):
+            return true
+        case (.watchConnectivityUnavailable, .watchConnectivityUnavailable):
+            return true
+            
+        // Generic Errors
+        case (.unknown(let lError), .unknown(let rError)):
+            return lError.localizedDescription == rError.localizedDescription
+        case (.cancelled, .cancelled):
+            return true
+            
+        // Different cases are never equal
+        default:
+            return false
         }
     }
 }
