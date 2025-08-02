@@ -1096,6 +1096,29 @@ class MockTherapyRepository: TherapyRepository {
         }
         mockGoalLogs.removeAll { $0.id == goalLogId }
     }
+    
+    // MARK: - Additional Methods for SessionViewModel Support
+    
+    func getAllClients() async throws -> [Client] {
+        if shouldThrowError {
+            throw MockRepositoryError.operationFailed("Failed to load all clients")
+        }
+        return mockClients
+    }
+    
+    func getAllGoalTemplates() async throws -> [GoalTemplate] {
+        if shouldThrowError {
+            throw MockRepositoryError.operationFailed("Failed to load all goal templates")
+        }
+        return mockGoalTemplates
+    }
+    
+    func createSession(_ session: Session) async throws {
+        if shouldThrowError {
+            throw MockRepositoryError.operationFailed("Failed to create session")
+        }
+        mockSessions.append(session)
+    }
 }
 
 // MARK: - Mock Error Types

@@ -1,5 +1,5 @@
 import Foundation
-import UIKit
+import WatchKit
 
 /// Centralized haptic feedback management for consistent user experience across the Watch app
 class HapticManager {
@@ -11,38 +11,32 @@ class HapticManager {
     
     /// Light impact for minor interactions (button presses, selections)
     func lightImpact() {
-        let impact = UIImpactFeedbackGenerator(style: .light)
-        impact.impactOccurred()
+        WKInterfaceDevice.current().play(.click)
     }
     
     /// Medium impact for significant actions (session start, major state changes)
     func mediumImpact() {
-        let impact = UIImpactFeedbackGenerator(style: .medium)
-        impact.impactOccurred()
+        WKInterfaceDevice.current().play(.start)
     }
     
     /// Heavy impact for critical actions (session end, errors)
     func heavyImpact() {
-        let impact = UIImpactFeedbackGenerator(style: .heavy)
-        impact.impactOccurred()
+        WKInterfaceDevice.current().play(.stop)
     }
     
     /// Success notification for positive outcomes
     func success() {
-        let feedback = UINotificationFeedbackGenerator()
-        feedback.notificationOccurred(.success)
+        WKInterfaceDevice.current().play(.success)
     }
     
     /// Warning notification for attention-needed situations
     func warning() {
-        let feedback = UINotificationFeedbackGenerator()
-        feedback.notificationOccurred(.warning)
+        WKInterfaceDevice.current().play(.notification)
     }
     
     /// Error notification for failures or problems
     func error() {
-        let feedback = UINotificationFeedbackGenerator()
-        feedback.notificationOccurred(.error)
+        WKInterfaceDevice.current().play(.failure)
     }
     
     // MARK: - Context-Specific Feedback

@@ -192,7 +192,8 @@ struct CueLevelPickerView: View {
 
 struct CueLevelPickerView_Previews: PreviewProvider {
     static var previews: some View {
-        let repository = try! TherapyRepository(coreDataStack: CoreDataStack(inMemory: true))
+        let stack = try! CoreDataStack(inMemory: true)
+        let repository = SimpleCoreDataRepository(coreDataStack: stack)
         let sessionViewModel = SessionViewModel(repository: repository)
         sessionViewModel.showingCueLevelPicker = true
         

@@ -50,7 +50,7 @@ struct ActiveSession: Identifiable {
         
         let trial = TrialEntry(
             goalTemplateId: currentGoal.id,
-            goalDescription: currentGoal.description,
+            goalDescription: currentGoal.description ?? "Unknown Goal",
             wasSuccessful: wasSuccessful,
             cueLevel: cueLevel,
             timestamp: Date()
